@@ -1,0 +1,32 @@
+.userImagePreview {
+  position: relative;
+}
+.userImageClose {
+  display: inline;
+  position: absolute;
+  color: white;
+  background-color: black;
+}
+.userImageClose:hover {
+  background-color: red;
+  color: black;
+}
+.userImageAdd {
+  color: white;
+}
+.modal-backdrop.in {
+  opacity: 0.9;
+}
+
+.bootstrapAlert {
+  z-index: 1056 !important;
+  /* the z-index is one more than modal's */
+}
+
+.modalCustom .modal-content{
+  background-color: #343a40;
+}
+
+.modalCustom .modal-header .btn-close{
+  filter: invert(1);
+}

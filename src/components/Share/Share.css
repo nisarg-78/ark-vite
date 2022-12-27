@@ -1,0 +1,17 @@
+.imagePreview {
+  position: relative;
+}
+.imageClose {
+  display: inline;
+  position: absolute;
+  color: white;
+  background-color: black;
+}
+.imageClose:hover {
+  background-color: red;
+  color: black;
+}
+
+.imageAdd{
+    color: white;
+}

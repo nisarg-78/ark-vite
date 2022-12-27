@@ -1,0 +1,7 @@
+.feed{
+    height: 100vh;
+    overflow-y: scroll;    
+}
+.feed::-webkit-scrollbar {
+    display: none;
+  }
