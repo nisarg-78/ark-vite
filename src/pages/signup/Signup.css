@@ -1,0 +1,10 @@
+.customForm{
+  padding: 2em;
+  background-color: #30353b;
+  border: 2px solid #727f8c;
+  border-radius: 1em;
+}
+
+.formLabel{
+  color: black;
+}

@@ -1,10 +1,23 @@
-.customForm{
-    padding: 2em;
-    background-color: #30353b;
-    border: 2px solid #727f8c;
-    border-radius: 1em;
+.customForm {
+  padding: 2em;
+  background-color: #30353b;
+  border: 2px solid #727f8c;
+  border-radius: 1em;
 }
 
-.formLabel{
-    color: black;
+.formLabel {
+  color: black;
+}
+
+a:link {
+  text-decoration: none;
+}
+a:visited {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+}
+a:active {
+  text-decoration: none;
 }

@@ -1,53 +1,64 @@
-import "./Login.css"
+import "./Signup.css"
 
 import InputGroup from "react-bootstrap/InputGroup"
 import Button from "react-bootstrap/Button"
 import Form from "react-bootstrap/Form"
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
-import { Lock, Mail } from "react-feather"
-import { useNavigate, Link } from "react-router-dom"
+import { Lock, Mail, User } from "react-feather"
 import { useContext, useState } from "react"
-
-import { signInWithEmailAndPassword } from "firebase/auth"
+import { Link } from "react-router-dom"
+import { createUserWithEmailAndPassword } from "firebase/auth"
 import { auth } from "../../firebase"
 
 import { UserContext } from "../../context/userContext/UserContext"
 import axios from "../../api/axios"
 import useAlert from "../../hooks/useAlert"
 
-function Login() {
-  const navigate = useNavigate()
-  const { setAlert } = useAlert()
+function Signup() {
   const { setUser } = useContext(UserContext)
-  const [loginEmail, setLoginEmail] = useState("")
-  const [loginPassword, setLoginPassword] = useState("")
+  const { setAlert } = useAlert()
+  const [signupUsername, setSignupUsername] = useState("")
+  const [signupEmail, setSignupEmail] = useState("")
+  const [signupPassword, setSignupPassword] = useState("")
 
-  const handleLogin = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault()
     try {
-      //api login
-      const res = await axios.post("/auth/login", {
-        email: loginEmail,
-        password: loginPassword,
+      //api signup
+      const res = await axios.post("/auth/register", {
+        username: signupUsername,
+        email: signupEmail,
+        password: signupPassword,
       })
+
       const apiUser = res.data.user
       axios.defaults.headers.common = {
         Authorization: `Bearer ${apiUser.accessToken}`,
       }
+      setUser((prev) => {
+        return { ...prev, apiUser }
+      })
 
-      //firebase login
-      const firebaseUser = await signInWithEmailAndPassword(
-        auth,
-        loginEmail,
-        loginPassword
-      )
-
-      if (firebaseUser && apiUser) {
-        setUser({ firebaseUser, apiUser })
-        return navigate("/")
+      //firebase signup
+      try {
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          signupEmail,
+          signupPassword
+        )
+        setUser((prev) => {
+          return { ...prev, firebaseUser: userCredential.user }
+        })
+      } catch (error) {
+        console.log(error.message)
+        setUser((prev) => {
+          return { ...prev, firebaseUser: null }
+        })
+        useAlert("Some error occured, please try again", "danger")
       }
     } catch (error) {
+      setAlert(error.response.data.error, "danger")
       setUser(null)
       console.log(error)
     }
@@ -63,13 +74,25 @@ function Login() {
           <Form className="customForm">
             <InputGroup className="mb-3">
               <InputGroup.Text id="basic-addon1">
+                <User color="black" width="18" height="18" />
+              </InputGroup.Text>
+              <Form.Control
+                placeholder="username"
+                aria-label="username"
+                aria-describedby="basic-addon1"
+                onChange={(e) => setSignupUsername(e.target.value)}
+              />
+            </InputGroup>
+
+            <InputGroup className="mb-3">
+              <InputGroup.Text id="basic-addon1">
                 <Mail color="black" width="18" height="18" />
               </InputGroup.Text>
               <Form.Control
                 placeholder="email"
                 aria-label="Email"
                 aria-describedby="basic-addon1"
-                onChange={(e) => setLoginEmail(e.target.value)}
+                onChange={(e) => setSignupEmail(e.target.value)}
               />
             </InputGroup>
 
@@ -81,22 +104,21 @@ function Login() {
                 placeholder="password"
                 aria-label="Password"
                 aria-describedby="basic-addon1"
-                onChange={(e) => setLoginPassword(e.target.value)}
+                onChange={(e) => setSignupPassword(e.target.value)}
               />
             </InputGroup>
 
             <div className="d-flex justify-content-between">
-              <Button variant="primary" type="submit" onClick={handleLogin}>
-                Login
+              <Button variant="primary" type="submit" onClick={handleSignup}>
+                Signup
               </Button>
 
-              <Link to="/signup">
+              <Link to="/login">
                 <Button variant="outline-primary" type="submit">
-                  Signup
+                  Login
                 </Button>
               </Link>
             </div>
-
           </Form>
         </Row>
       </Container>
@@ -104,4 +126,4 @@ function Login() {
   )
 }
 
-export default Login
+export default Signup

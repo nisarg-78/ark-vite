@@ -1,46 +1,62 @@
-import "./SideProfile.css";
+import "./SideProfile.css"
 
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import InputGroup from "react-bootstrap/InputGroup";
-import Form from "react-bootstrap/Form";
-import { X, Image } from "react-feather";
-import { useContext, useState } from "react";
-
-import axios from "../../api/axios";
-import { UserContext } from "../../context/userContext/UserContext";
-import useAlert from "../../hooks/useAlert";
+import Card from "react-bootstrap/Card"
+import Button from "react-bootstrap/Button"
+import Modal from "react-bootstrap/Modal"
+import InputGroup from "react-bootstrap/InputGroup"
+import Form from "react-bootstrap/Form"
+import { X, Image } from "react-feather"
+import { useContext, useState } from "react"
+import { ref, deleteObject } from "firebase/storage"
+import { storage } from "../../firebase"
+import axios from "../../api/axios"
+import { UserContext } from "../../context/userContext/UserContext"
+import useAlert from "../../hooks/useAlert"
+import uploadImage from "../../api/uploadImage"
 
 function SideProfile() {
-  const { user } = useContext(UserContext);
-  const { setAlert } = useAlert();
-  const [userImage, setUserImage] = useState(user.apiUser.profilePicture);
-  const [description, setDescription] = useState(
-    user.apiUser.description || ""
-  );
-  const [profileChangeButtonDisable, setProfileChangeButtonDisable] =
-    useState(false);
+  const { user } = useContext(UserContext)
+  const { setAlert } = useAlert()
 
-  const [profileModal, setProfileModal] = useState(false);
-  const handleClose = () => setProfileModal();
-  const handleShow = () => setProfileModal(true);
+  const [selectedImage, setSelectedImage] = useState(null)
+
+  const [description, setDescription] = useState(user.apiUser.description || "")
+  const [profileChangeButtonDisable, setProfileChangeButtonDisable] =
+    useState(false)
+  const [profileModal, setProfileModal] = useState(false)
+  const handleClose = () => setProfileModal()
+  const handleShow = () => setProfileModal(true)
 
   const handleProfileEdit = async () => {
-    if (!description ) return;
-    setProfileChangeButtonDisable(true);
+    if (!description && selectedImage === user.apiUser.profilePicture) return
+    setProfileChangeButtonDisable(true)
 
+    const profileUpdates = {}
+
+    if (description) profileUpdates.description = description
+
+    //upload image to firebase
     try {
-      await axios.patch(`/users/action/${user.apiUser._id}`, {
-        description,
-      });
-      setProfileChangeButtonDisable(false);
-      setAlert("Profile changed, refresh to see changes", "success")
+      if (selectedImage !== user.apiUser.profilePicture)
+        profileUpdates.profilePicture = await uploadImage(selectedImage)
     } catch (error) {
-      setAlert("Something went wrong. Please try again.", "danger")
-      setProfileChangeButtonDisable(false);
+      console.log(error)
+      return
     }
-  };
+
+    //update profile in api
+    try {
+      await axios.patch(`/users/action/${user.apiUser._id}`, profileUpdates)
+      setAlert("Profile changed, refresh to see changes", "success")
+      setProfileChangeButtonDisable(false)
+    } catch (error) {
+      //remove image from firebase
+      const desertRef = ref(storage, profileUpdates.selectedImage)
+      deleteObject(desertRef)
+      setAlert("Something went wrong. Please try again.", "danger")
+      setProfileChangeButtonDisable(false)
+    }
+  }
 
   return (
     <>
@@ -72,19 +88,19 @@ function SideProfile() {
           <Modal.Title>Edit Profile</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {userImage && (
+          {user.apiUser.profilePicture && (
             <>
               <div className="userImagePreview">
                 <X
                   className="imageClose"
                   color="white"
-                  onClick={() => setUserImage(user.apiUser.profilePicture)}
+                  onClick={() => setSelectedImage(null)}
                 />
                 <Card.Img
                   variant="top"
                   height={250}
                   style={{ objectFit: "contain" }}
-                  src={userImage || null}
+                  src={selectedImage ? URL.createObjectURL(selectedImage) : user.apiUser.profilePicture}
                 />
               </div>
             </>
@@ -98,7 +114,7 @@ function SideProfile() {
               id="userImage"
               accept=".png, .jpeg, .jpg, .gif, .tiff, .webm, "
               onChange={(event) => {
-                setUserImage(URL.createObjectURL(event.target.files[0]));
+                setSelectedImage(event.target.files[0])
               }}
               style={{ display: "none" }}
             />
@@ -141,7 +157,7 @@ function SideProfile() {
         </Modal.Footer>
       </Modal>
     </>
-  );
+  )
 }
 
-export default SideProfile;
+export default SideProfile
