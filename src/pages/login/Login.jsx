@@ -34,7 +34,7 @@ function Login() {
       const apiUser = res.data.user
       axios.defaults.headers.common = {
         Authorization: `Bearer ${apiUser.accessToken}`,
-      }
+      };
 
       //firebase login
       const firebaseUser = await signInWithEmailAndPassword(

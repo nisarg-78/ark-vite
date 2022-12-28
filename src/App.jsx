@@ -27,12 +27,10 @@ function App() {
         if (apiUser) {
           setUser((prev) => {
             return { ...prev, apiUser }
-          })
-          
-          axios.interceptors.request.use((req) => {
-            req.headers.authorization = `Bearer ${apiUser.accessToken}`
-            return req
-          })
+          })          
+          axios.defaults.headers.common = {
+            Authorization: `Bearer ${apiUser.accessToken}`,
+          };
           
         }
 
