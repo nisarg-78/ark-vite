@@ -28,9 +28,12 @@ function App() {
           setUser((prev) => {
             return { ...prev, apiUser }
           })
-          axios.defaults.headers.common = {
-            Authorization: `Bearer ${apiUser.accessToken}`,
-          }
+          
+          axios.interceptors.request.use((req) => {
+            req.headers.authorization = `Bearer ${apiUser.accessToken}`
+            return req
+          })
+          
         }
 
         auth.onAuthStateChanged(function (firebaseUser) {
@@ -45,8 +48,6 @@ function App() {
       }
     })()
   }, [])
-
-  
 
   const router = createBrowserRouter([
     {
