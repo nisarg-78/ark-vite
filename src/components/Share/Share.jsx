@@ -2,12 +2,13 @@ import "./Share.css";
 import axios from "../../api/axios";
 import { UserContext } from "../../context/userContext/UserContext";
 
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 
 import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { X, Image } from "react-feather";
+import uploadImage from "../../api/uploadImage";
 
 function Share() {
   const { user } = useContext(UserContext);
@@ -18,10 +19,8 @@ function Share() {
 
   const handleSubmit = async (e) => {
     try {
-      console.log(postDescription);
       setIsSharing(true);
       e.preventDefault();
-
       if (!postDescription && !postImage) return;
 
       const newPost = {
@@ -29,32 +28,23 @@ function Share() {
         image: "",
       };
 
-      if (postDescription) newPost.description = postDescription;
-      //   if (postImage) newPost.image = await uploadToFirebase(postImage)
-
-      try {
-        console.log("before post");
-        await axios.post(
-          "/posts",
-          {
-            userId: user.apiUser._id,
-            post: newPost,
-          },
-        );
-        console.log("after post");
-      } catch {
-        // if (newPost.image) {
-        //   const desertRef = ref(storage, newPost.post.image);
-        //   deleteObject(desertRef);
-        //   return;
-        // }
+      if (postDescription) {
+        newPost.description = postDescription;
       }
+      if (postImage) {
+        newPost.image = await uploadImage(postImage);
+      }
+
+      await axios.post("/posts", {
+        userId: user.apiUser._id,
+        post: newPost,
+      });
+
     } catch (error) {
       console.log(error);
     } finally {
       setPostDescription("");
       setPostImage(null);
-      //   setRefresh(!refresh);
     }
   };
 
@@ -95,7 +85,7 @@ function Share() {
         </div>
       )}
       <div className="d-grid gap-2 my-1">
-        <Button variant="light" onClick={handleSubmit}>
+        <Button disabled={isSharing} variant="light" onClick={handleSubmit}>
           Post
         </Button>
       </div>

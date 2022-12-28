@@ -34,7 +34,7 @@ function Feed() {
   }, [refresh]);
 
   return (
-    <div className="container d-flex flex-column align-items-center feed">
+    <div className="container d-flex flex-column align-items-center mt-2 feed">
       {posts.map(function (post) {
         return <Post key={post._id} post={post} />;
       })}

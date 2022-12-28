@@ -5,20 +5,16 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import InputGroup from "react-bootstrap/InputGroup";
 import Form from "react-bootstrap/Form";
-import Alert from "react-bootstrap/Alert";
 import { X, Image } from "react-feather";
 import { useContext, useState } from "react";
 
 import axios from "../../api/axios";
 import { UserContext } from "../../context/userContext/UserContext";
+import useAlert from "../../hooks/useAlert";
 
 function SideProfile() {
   const { user } = useContext(UserContext);
-
-  const [alertType, setAlertType] = useState("success");
-  const [alertVisible, setAlertVisible] = useState(false);
-  const [alertMsg, setAlertMsg] = useState("");
-
+  const { setAlert } = useAlert();
   const [userImage, setUserImage] = useState(user.apiUser.profilePicture);
   const [description, setDescription] = useState(
     user.apiUser.description || ""
@@ -30,34 +26,19 @@ function SideProfile() {
   const handleClose = () => setProfileModal();
   const handleShow = () => setProfileModal(true);
 
-  const bootstrapAlert = (type, msg, time = 4000) => {
-    setAlertType(type);
-    setAlertMsg(msg);
-    setAlertVisible(true);
-    setTimeout(() => {
-      setAlertType("");
-      setAlertMsg("");
-      setAlertVisible(false);
-    }, time);
-  };
-
   const handleProfileEdit = async () => {
-    if (!description) return;
+    if (!description ) return;
     setProfileChangeButtonDisable(true);
 
     try {
-      const res = await axios.patch(`/users/action/${user.apiUser._id}`, {
+      await axios.patch(`/users/action/${user.apiUser._id}`, {
         description,
       });
       setProfileChangeButtonDisable(false);
-
-      bootstrapAlert(
-        "success",
-        "Profile has been updated. Refresh to see changes."
-      );
+      setAlert("Profile changed, refresh to see changes", "success")
     } catch (error) {
+      setAlert("Something went wrong. Please try again.", "danger")
       setProfileChangeButtonDisable(false);
-      bootstrapAlert("danger", "Something went wrong. Please try again.");
     }
   };
 
@@ -158,15 +139,7 @@ function SideProfile() {
             Save Changes
           </Button>
         </Modal.Footer>
-        ;
       </Modal>
-      <Alert
-        className="bootstrapAlert position-fixed position-absolute bottom-0 start-50 translate-middle"
-        variant={alertType}
-        show={alertVisible}
-      >
-        {alertMsg}
-      </Alert>
     </>
   );
 }

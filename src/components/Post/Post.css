@@ -1,0 +1,25 @@
+.deletePost{
+  opacity: 15%;
+  transition: 0.2s;
+}
+.deletePost:hover{
+  opacity: 100%;
+}
+
+.svg{
+  height: 1em;
+  width: 1em;
+}
+
+.likeButton{
+  cursor: pointer;
+}
+
+.cardBody{
+  padding: 0 !important;
+}
+
+.cardBody .card-text{
+  margin: 0;
+  padding: 0 !important;
+}

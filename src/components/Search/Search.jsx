@@ -1,16 +1,20 @@
-import './Search.css'
+import "./Search.css";
 import axios from "../../api/axios";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+
 import Form from "react-bootstrap/Form";
 import ListGroup from "react-bootstrap/ListGroup";
-import Image from "react-bootstrap/Image";
 
-import { useState, useEffect } from "react";
+
+import { UserContext } from "../../context/userContext/UserContext";
+import { useState, useEffect, useContext } from "react";
+import SearchUser from "../SearchUser/SearchUser";
 
 export default function Search() {
+  const { user } = useContext(UserContext);
   const [searchInput, setSearchInput] = useState();
   const [searchResult, setSearchResult] = useState([]);
 
@@ -55,18 +59,7 @@ export default function Search() {
                       className="bg-dark text-light searchItem"
                     >
                       {item.username ? (
-                        <div className="">
-                          <Image
-                            src={item.profilePicture}
-                            height="40"
-                            width="40"
-                            roundedCircle
-                            className="me-2"
-                            style={{ objectFit: "cover" }}
-                          />
-                          {/* <Link to={`/profile/${item.username}`}> */}{" "}
-                          <b>{item.username}</b>  {/* </Link> */}
-                        </div>
+                        <SearchUser followee={item} />
                       ) : (
                         item.description
                       )}

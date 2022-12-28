@@ -3,7 +3,6 @@
 import Unauthorized from "../../pages/Unauthorized/Unauthorized"
 
 function Protected({ isSignedIn, children }) {
-  console.log(isSignedIn)
   if (!isSignedIn) {
     return <Unauthorized />
   }

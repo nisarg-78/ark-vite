@@ -8,9 +8,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { UserContext } from "./context/userContext/UserContext";
 import { useEffect, useState } from "react";
 import Protected from "./components/Protected/Protected";
+import AlertPopup from "./components/AlertPopup/AlertPopup";
 import axios from "./api/axios";
 import { auth } from "./firebase";
-
+import { AlertProvider } from "./context/AlertContext/AlertContext";
 function App() {
   const [user, setUser] = useState({ firebaseUser: null, apiUser: null });
   const [verifying, setVerifying] = useState(false);
@@ -48,6 +49,7 @@ function App() {
       path: "/",
       element: (
         <Protected isSignedIn={Boolean(user.firebaseUser && user.apiUser)}>
+          <AlertPopup />
           <Home />
         </Protected>
       ),
@@ -69,9 +71,19 @@ function App() {
         </div>
       ) : (
         <UserContext.Provider value={{ user, setUser }}>
-          <RouterProvider router={router} />
+          <AlertProvider>
+            <RouterProvider router={router} />
+          </AlertProvider>
         </UserContext.Provider>
       )}
+
+      {/* <Alert
+        className="bootstrapAlert position-fixed position-absolute bottom-0 start-50 translate-middle"
+        variant={alertType}
+        show={alertVisible}
+      >
+        {alertMsg}
+      </Alert> */}
     </div>
   );
 }

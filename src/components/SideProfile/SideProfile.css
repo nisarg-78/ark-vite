@@ -18,10 +18,6 @@
   opacity: 0.9;
 }
 
-.bootstrapAlert {
-  z-index: 1056 !important;
-  /* the z-index is one more than modal's */
-}
 
 .modalCustom .modal-content{
   background-color: #343a40;
