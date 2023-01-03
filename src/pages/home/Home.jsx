@@ -10,11 +10,6 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-import { useEffect, useContext } from "react";
-
-import { UserContext } from "../../context/userContext/UserContext";
-import { useNavigate } from "react-router-dom"
-
 function Home() {
 
   return (

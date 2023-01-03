@@ -7,19 +7,21 @@ import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import { Lock, Mail } from "react-feather"
 import { useNavigate, Link } from "react-router-dom"
-import { useContext, useState } from "react"
+import { useState } from "react"
 
 import { signInWithEmailAndPassword } from "firebase/auth"
 import { auth } from "../../firebase"
 
-import { UserContext } from "../../context/userContext/UserContext"
 import axios from "../../api/axios"
 import useAlert from "../../hooks/useAlert"
+import useAuth from "../../hooks/useAuth"
 
 function Login() {
+
   const navigate = useNavigate()
   const { setAlert } = useAlert()
-  const { setUser } = useContext(UserContext)
+  const { user, setUser } = useAuth()
+
   const [loginEmail, setLoginEmail] = useState("")
   const [loginPassword, setLoginPassword] = useState("")
 
@@ -49,6 +51,7 @@ function Login() {
       }
     } catch (error) {
       setUser(null)
+      setAlert("Something's wrong", "danger")
       console.log(error)
     }
   }
@@ -58,7 +61,7 @@ function Login() {
       <Container className="overflow-hidden">
         <Row
           md="auto"
-          className="min-vh-100 justify-content-center align-items-center"
+          className="min-vh-100 bg-dark justify-content-center align-items-center"
         >
           <Form className="customForm">
             <InputGroup className="mb-3">

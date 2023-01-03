@@ -10,15 +10,13 @@ import { useNavigate } from "react-router-dom";
 
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
-
-import { useContext } from "react";
-
-import { UserContext } from "../../context/userContext/UserContext";
 import axios from '../../api/axios';
+
+import useAuth from '../../hooks/useAuth';
 
 function Topbar() {
 
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
