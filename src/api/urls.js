@@ -1,8 +1,7 @@
-console.log(process.env.NODE_ENV)
-
+let apiUrl
 if (process.env.NODE_ENV === "development") {
-	const apiUrl = "http://localhost:8000/api"
+	apiUrl = "http://localhost:8000/api"
 } else {
-	const apiUrl = "https://ark-api-r8tb.onrender.com/api"
+	apiUrl = "https://ark-api-r8tb.onrender.com/api"
 }
 export { apiUrl }
