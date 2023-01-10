@@ -1,7 +1,32 @@
-.feed{
-    height: 100vh;
-    overflow-y: scroll;    
+.feed {
+	height: 100vh;
+	overflow: scroll;
 }
 .feed::-webkit-scrollbar {
-    display: none;
-  }
+	display: none;
+}
+
+@media only screen and (min-width: 0px) and (max-width: 560px) {
+	.border {
+		border: 0 solid !important;
+		padding: 0;
+	}
+}
+
+.feedContainer {
+	display: flex;
+}
+
+.feedButtons{
+	margin-top: 1em;
+}
+
+.feedButton{
+	margin-top: 1em;
+	cursor: pointer;
+	/* border: 3px solid #3e464e; */
+}
+
+.feedButton:hover{
+	transform: scale(1.125);
+}

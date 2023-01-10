@@ -12,7 +12,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth"
 import { auth } from "../../firebase"
 
 import { UserContext } from "../../context/userContext/UserContext"
-import axios from "../../api/axios"
+import { axiosPrivate as axios } from "../../api/axios"
 import useAlert from "../../hooks/useAlert"
 
 function Signup() {

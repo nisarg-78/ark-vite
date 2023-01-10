@@ -12,7 +12,7 @@ import { useState } from "react"
 import { signInWithEmailAndPassword } from "firebase/auth"
 import { auth } from "../../firebase"
 
-import axios from "../../api/axios"
+import { axiosPrivate as axios } from "../../api/axios"
 import useAlert from "../../hooks/useAlert"
 import useAuth from "../../hooks/useAuth"
 

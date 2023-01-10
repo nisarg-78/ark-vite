@@ -1,5 +1,5 @@
 import "./Search.css";
-import axios from "../../api/axios";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate"
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -8,13 +8,11 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import ListGroup from "react-bootstrap/ListGroup";
 
-
-import { UserContext } from "../../context/userContext/UserContext";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import SearchUser from "../SearchUser/SearchUser";
 
 export default function Search() {
-  const { user } = useContext(UserContext);
+  const axios = useAxiosPrivate()
   const [searchInput, setSearchInput] = useState();
   const [searchResult, setSearchResult] = useState([]);
 

@@ -11,19 +11,18 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 function Home() {
-
   return (
     <>
       <Container fluid className="overflow-hidden min-vh-100">
         <Row>
           <Topbar />
         </Row>
-        <Row className=" justify-content-around">
-          <Col lg={3} >
+        <Row className="content justify-content-between">
+          <Col lg={3} className="">
             <SideProfile/>
             <Share />
           </Col>
-          <Col lg={4} >
+          <Col lg={4} className='py-0'>
             <Feed/>
           </Col>
           <Col lg={3}>

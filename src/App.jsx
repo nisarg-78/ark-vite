@@ -7,17 +7,17 @@ import Signup from "./pages/signup/Signup"
 import Error from "./pages/error/Error"
 import RequireAuth from "./components/RequireAuth"
 import Unauthorized from "./pages/Unauthorized/Unauthorized"
-import Protected from "./components/Protected/Protected"
 
 import { auth } from "./firebase"
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import { useEffect, useState } from "react"
-import axios from "./api/axios"
+import { useEffect } from "react"
+import useAxiosPrivate from "./hooks/useAxiosPrivate"
 import useAuth from "./hooks/useAuth"
 
 function App() {
 	const { setUser } = useAuth()
+	const axios = useAxiosPrivate()
 
 	useEffect(() => {
 		;(async () => {
@@ -29,14 +29,9 @@ function App() {
 					setUser((prev) => {
 						return { ...prev, apiUser }
 					})
-					axios.defaults.headers.common = {
-						Authorization: `Bearer ${apiUser.accessToken}`,
-					}
 				}
 
 				auth.onAuthStateChanged((firebaseUser) => {
-					console.log(firebaseUser)
-
 					if (firebaseUser) {
 						setUser((prev) => {
 							return { ...prev, firebaseUser }
@@ -62,7 +57,7 @@ function App() {
 						<Route index element={<Home />} />
 					</Route>
 					<Route path='login' element={<Login />} />
-					<Route path='register' element={<Signup />} />
+					<Route path='signup' element={<Signup />} />
 					<Route path='unauthorized' element={<Unauthorized />} />
 					<Route path='*' element={<Error />} />
 				</Route>

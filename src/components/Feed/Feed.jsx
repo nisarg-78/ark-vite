@@ -1,45 +1,80 @@
-import "./Feed.css";
-import axios from "../../api/axios";
-import { useContext, useState, useEffect } from "react";
+import "./Feed.css"
 
-import { UserContext } from "../../context/userContext/UserContext";
+import { Home, TrendingUp } from "react-feather"
 
-import Post from "../Post/Post";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate"
+import { useState, useEffect, useContext } from "react"
+
+import Post from "../Post/Post"
+import { UserContext } from "../../context/userContext/UserContext"
 
 function Feed() {
-  const { user } = useContext(UserContext);
+	const { user } = useContext(UserContext)
+	const axios = useAxiosPrivate()
+	const [refresh, setRefresh] = useState(false)
+	const [posts, setPosts] = useState([])
 
-  const [posts, setPosts] = useState([]);
-  const [refresh, setRefresh] = useState(false);
+	const [feedState, setFeedState] = useState()
 
-  //   const handleRefreshFeed = () => {
-  //     setRefresh(!refresh);
-  //   };
+	useEffect(() => {
+		const fetchPosts = async () => {
+			const res = await axios.get(`posts/feed/${user.apiUser._id}`)
+			let resPosts = res.data
+			resPosts = res.data.sort((a, b) =>
+				a.createdAt > b.createdAt ? -1 : 1
+			)
+			setPosts(resPosts)
+			setFeedState("home")
+		}
+		fetchPosts()
+	}, [refresh])
 
-  //   const handleTop = () => {
-  //     setPosts((posts) =>
-  //       posts.sort((a, b) => (a.likes.length > b.likes.length ? -1 : 1))
-  //     );
-  //   };
+	const fetchHomeFeed = async () => {
+		const res = await axios.get(`posts/feed/${user.apiUser._id}`)
+		let resPosts = res.data
+		resPosts = res.data.sort((a, b) =>
+			a.likesCount > b.likesCount ? -1 : 1
+		)
+		setPosts(resPosts)
+		setFeedState("home")
+	}
+	const fetchTopFeed = async () => {
+		const res = await axios.get(`posts/top`)
+		let resPosts = res.data
+		resPosts = res.data.sort((a, b) =>
+			a.likesCount > b.likesCount ? -1 : 1
+		)
+		setPosts(resPosts)
+		setFeedState("top")
+	}
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const res = await axios.get(`posts/feed/top`);
-      // const res = await axios.get(`posts/feed/${user._id}`);
-      let resPosts = res.data;
-      resPosts = res.data.sort((a, b) => (a.likesCount > b.likesCount ? -1 : 1));
-      setPosts(resPosts);
-    };
-    fetchPosts();
-  }, [refresh]);
-
-  return (
-    <div className="container d-flex flex-column align-items-center mt-2 feed">
-      {posts.map(function (post) {
-        return <Post key={post._id} post={post} />;
-      })}
-    </div>
-  );
+	return (
+		<>
+			<div className='feedContainer'>
+				<div className='feedButtons'>
+					<Home
+						className='feedButton'
+						size={24}
+						color={feedState === "home" ? "white" : "gray"}
+						onClick={fetchHomeFeed}>
+						Home
+					</Home>
+					<TrendingUp
+						className='feedButton'
+						size={24}
+						color={feedState === "top" ? "white" : "gray"}
+						onClick={fetchTopFeed}>
+						Top
+					</TrendingUp>
+				</div>
+				<div className='container d-flex flex-column p-0 align-items-center mt-0 pb-3 feed'>
+					{posts.map(function (post) {
+						return <Post key={post._id} post={post} />
+					})}
+				</div>
+			</div>
+		</>
+	)
 }
 
-export default Feed;
+export default Feed
