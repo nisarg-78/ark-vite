@@ -18,13 +18,11 @@ function Feed() {
 
 	useEffect(() => {
 		const fetchPosts = async () => {
-			const res = await axios.get(`posts/feed/${user.apiUser._id}`)
-			let resPosts = res.data
-			resPosts = res.data.sort((a, b) =>
-				a.createdAt > b.createdAt ? -1 : 1
-			)
-			setPosts(resPosts)
-			setFeedState("home")
+			if (user.apiUser.following.length > 0) {
+				fetchHomeFeed()
+			} else {
+				fetchTopFeed()
+			}
 		}
 		fetchPosts()
 	}, [refresh])
@@ -32,9 +30,7 @@ function Feed() {
 	const fetchHomeFeed = async () => {
 		const res = await axios.get(`posts/feed/${user.apiUser._id}`)
 		let resPosts = res.data
-		resPosts = res.data.sort((a, b) =>
-			a.likesCount > b.likesCount ? -1 : 1
-		)
+		resPosts = res.data.sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1))
 		setPosts(resPosts)
 		setFeedState("home")
 	}

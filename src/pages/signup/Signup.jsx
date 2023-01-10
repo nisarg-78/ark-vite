@@ -15,12 +15,16 @@ import { UserContext } from "../../context/userContext/UserContext"
 import { axiosPrivate as axios } from "../../api/axios"
 import useAlert from "../../hooks/useAlert"
 
+import { useNavigate } from "react-router-dom";
+
 function Signup() {
   const { setUser } = useContext(UserContext)
   const { setAlert } = useAlert()
   const [signupUsername, setSignupUsername] = useState("")
   const [signupEmail, setSignupEmail] = useState("")
   const [signupPassword, setSignupPassword] = useState("")
+
+  const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault()
@@ -32,7 +36,8 @@ function Signup() {
         password: signupPassword,
       })
 
-      const apiUser = res.data.user
+      const apiUser = res.data
+      console.log(apiUser)
       axios.defaults.headers.common = {
         Authorization: `Bearer ${apiUser.accessToken}`,
       }
@@ -50,6 +55,7 @@ function Signup() {
         setUser((prev) => {
           return { ...prev, firebaseUser: userCredential.user }
         })
+        navigate("/")
       } catch (error) {
         console.log(error.message)
         setUser((prev) => {
@@ -58,7 +64,8 @@ function Signup() {
         useAlert("Some error occured, please try again", "danger")
       }
     } catch (error) {
-      setAlert(error.response.data.error, "danger")
+      console.log(error)
+      setAlert(error?.response?.data?.error, "danger")
       setUser(null)
       console.log(error)
     }
