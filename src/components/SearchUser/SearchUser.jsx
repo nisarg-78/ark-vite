@@ -12,9 +12,11 @@ export default function SearchUser({ followee }) {
   );
 
   const handleFollow = () => {
+    setIsFollowing((isFollowing => !isFollowing))
     axios
       .put(`/users/${followee._id}/follow`, { userId: user.apiUser._id })
-      .then((res) => setIsFollowing(res.data.follow));
+      .then((res) => setIsFollowing(res.data.follow))
+      .catch(setIsFollowing((isFollowing => !isFollowing)))
   };
 
   return (

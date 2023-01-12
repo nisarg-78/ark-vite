@@ -1,6 +1,6 @@
-.searchItem{
-    cursor: pointer;
+.searchItem {
+	cursor: pointer;
 }
-.searchItem:hover{
-    background-color: #3f474f !important;
+.searchItem:hover {
+	background-color: #3f474f !important;
 }
