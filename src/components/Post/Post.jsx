@@ -71,7 +71,6 @@ function Post({ post }) {
 			const res = await axios.put(`/posts/${post._id}/like`, {
 				userId: user.apiUser._id,
 			})
-			console.log(res.data)
 		} catch (error) {
 			isLiked ? unlike() : like()
 		}

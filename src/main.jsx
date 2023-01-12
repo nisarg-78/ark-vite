@@ -7,11 +7,11 @@ import { AlertProvider } from "./context/AlertContext/AlertContext"
 import { UserProvider } from "./context/userContext/UserContext"
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-	<React.StrictMode>
+	// <React.StrictMode>
 		<UserProvider>
 				<AlertProvider>
 					<App />
 				</AlertProvider>
 		</UserProvider>
-	</React.StrictMode>
+	// </React.StrictMode>
 )

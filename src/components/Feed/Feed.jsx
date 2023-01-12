@@ -1,6 +1,7 @@
 import "./Feed.css"
 
 import { Home, TrendingUp } from "react-feather"
+import InfiniteScroll from "react-infinite-scroll-component"
 
 import useAxiosPrivate from "../../hooks/useAxiosPrivate"
 import { useState, useEffect, useContext } from "react"
@@ -12,36 +13,49 @@ function Feed() {
 	const { user } = useContext(UserContext)
 	const axios = useAxiosPrivate()
 	const [refresh, setRefresh] = useState(false)
-	const [posts, setPosts] = useState([])
+	const [homePosts, setHomePosts] = useState([])
+	const [topPosts, setTopPosts] = useState([])
+	const [allHomePostsFetched, setAllHomePostsFetched] = useState(false)
+	const [allTopPostsFetched, setAllTopPostsFetched] = useState(false)
 
-	const [feedState, setFeedState] = useState()
+	const [pageSize, setPageSize] = useState(15)
+	const [homePageNum, setHomePageNum] = useState(1)
+	const [topPageNum, setTopPageNum] = useState(1)
+
+	const [feedState, setFeedState] = useState("home")
 
 	useEffect(() => {
 		const fetchPosts = async () => {
-			if (user.apiUser.following.length > 0) {
+			if (feedState === "home") {
+				setHomePageNum(0)
 				fetchHomeFeed()
-			} else {
+			}
+			if (feedState === "top") {
+				setTopPageNum(0)
 				fetchTopFeed()
 			}
 		}
 		fetchPosts()
-	}, [refresh])
+	}, [feedState])
 
 	const fetchHomeFeed = async () => {
-		const res = await axios.get(`posts/feed/${user.apiUser._id}`)
-		let resPosts = res.data
-		resPosts = res.data.sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1))
-		setPosts(resPosts)
-		setFeedState("home")
+		if (allHomePostsFetched) return
+		const res = await axios.get(`posts/feed/${user.apiUser._id}`, {
+			params: { page: homePageNum, pageSize },
+		})
+		if (res.data.length < pageSize) setAllHomePostsFetched(true)
+		setHomePosts((posts) => posts.concat(res.data))
+		setHomePageNum(homePageNum + 1)
 	}
+	
 	const fetchTopFeed = async () => {
-		const res = await axios.get(`posts/top`)
-		let resPosts = res.data
-		resPosts = res.data.sort((a, b) =>
-			a.likesCount > b.likesCount ? -1 : 1
-		)
-		setPosts(resPosts)
-		setFeedState("top")
+		if (allTopPostsFetched) return
+		const res = await axios.get(`posts/top`, {
+			params: { page: topPageNum, pageSize },
+		})
+		if (res.data.length < pageSize) setAllTopPostsFetched(true)
+		setTopPosts((posts) => posts.concat(res.data))
+		setTopPageNum(topPageNum + 1)
 	}
 
 	return (
@@ -52,21 +66,40 @@ function Feed() {
 						className='feedButton'
 						size={24}
 						color={feedState === "home" ? "white" : "gray"}
-						onClick={fetchHomeFeed}>
+						onClick={() => {
+							setFeedState("home")
+						}}>
 						Home
 					</Home>
 					<TrendingUp
 						className='feedButton'
 						size={24}
 						color={feedState === "top" ? "white" : "gray"}
-						onClick={fetchTopFeed}>
+						onClick={() => {
+							setFeedState("top")
+						}}>
 						Top
 					</TrendingUp>
 				</div>
 				<div className='container d-flex flex-column p-0 align-items-center mt-0 pb-3 feed'>
-					{posts.map(function (post) {
-						return <Post key={post._id} post={post} />
-					})}
+					<InfiniteScroll
+						dataLength={feedState === "home" ? homePosts.length : topPosts.length}
+						next={
+							feedState === "home" ? fetchHomeFeed : fetchTopFeed
+						}
+						hasMore={
+							feedState === "home"
+								? !allHomePostsFetched
+								: !allTopPostsFetched
+						}>
+						{feedState === "home"
+							? homePosts.map(function (post) {
+									return <Post key={post._id} post={post} />
+							  })
+							: topPosts.map(function (post) {
+									return <Post key={post._id} post={post} />
+							  })}
+					</InfiniteScroll>
 				</div>
 			</div>
 		</>
