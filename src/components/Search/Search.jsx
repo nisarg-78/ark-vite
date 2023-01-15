@@ -33,7 +33,7 @@ export default function Search() {
 	}, [searchInput])
 
 	return (
-		<Container fluid className='my-3 position-relative'>
+		<>
 			<Row>
 				<Col>
 					<Form.Control
@@ -68,6 +68,6 @@ export default function Search() {
 					</Row>
 				</>
 			)}
-		</Container>
+		</>
 	)
 }

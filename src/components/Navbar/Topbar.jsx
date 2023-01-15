@@ -36,7 +36,9 @@ function Topbar() {
 		<>
 			<Navbar bg='dark' variant='dark' expand='lg'>
 				<Container fluid>
-					<Navbar.Brand href='#'>Ark</Navbar.Brand>
+					<Navbar.Brand onClick={() => navigate("/")}>
+						Ark
+					</Navbar.Brand>
 
 					<Navbar.Toggle aria-controls='navbarScroll' />
 

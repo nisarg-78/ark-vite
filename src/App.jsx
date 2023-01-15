@@ -2,11 +2,13 @@ import "./App.css"
 
 import Layout from "./components/Layout"
 import Home from "./pages/home/Home"
+import Chat from "./pages/chat/Chat"
 import Login from "./pages/login/Login"
 import Signup from "./pages/signup/Signup"
 import Error from "./pages/error/Error"
 import RequireAuth from "./components/RequireAuth"
 import Unauthorized from "./pages/Unauthorized/Unauthorized"
+import Topbar from "./components/Navbar/Topbar"
 
 import { auth } from "./firebase"
 
@@ -50,19 +52,22 @@ function App() {
 	}, [])
 
 	return (
-		<Router>
-			<Routes>
-				<Route path='/' element={<Layout />}>
-					<Route element={<RequireAuth />}>
-						<Route index element={<Home />} />
+		<>
+			<Router>
+				<Routes>
+					<Route path='/' element={<Layout />}>
+						<Route element={<RequireAuth />}>
+							<Route index element={<Home />} />
+							<Route path='chat' element={<Chat />} />
+						</Route>
+						<Route path='login' element={<Login />} />
+						<Route path='signup' element={<Signup />} />
+						<Route path='unauthorized' element={<Unauthorized />} />
+						<Route path='*' element={<Error />} />
 					</Route>
-					<Route path='login' element={<Login />} />
-					<Route path='signup' element={<Signup />} />
-					<Route path='unauthorized' element={<Unauthorized />} />
-					<Route path='*' element={<Error />} />
-				</Route>
-			</Routes>
-		</Router>
+				</Routes>
+			</Router>
+		</>
 	)
 }
 
