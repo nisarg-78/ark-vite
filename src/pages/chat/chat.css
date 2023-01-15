@@ -1,3 +1,8 @@
 .chat-container {
 	background-color: #343a40;
 }
+
+.chat-box {
+	background-color: #414850;
+    border-radius: 10px;
+}

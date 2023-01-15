@@ -38,8 +38,8 @@ export default function Chat() {
 
 	return (
 		<main className='chat-container'>
-			<Container className='p-5 overflow-hidden min-vh-100 text-white'>
-				<Row>
+			<Container className='p-5 overflow-hidden vh-100 text-white'>
+				<Row className="h-100">
 					<Col>
 						<Button variant='dark' className='my-2 w-100'>
 							Add Conversation <Plus />
@@ -62,7 +62,7 @@ export default function Chat() {
 							</ListGroup.Item>
 						</ListGroup>
 					</Col>
-					<Col md={8}>
+					<Col md={8} className='d-flex justify-content-between flex-column chat-box'>
 						<Row className='my-2'>
 							{/* <span>max: {maxTokens}</span> */}
 							{/* <hr /> */}

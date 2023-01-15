@@ -7,13 +7,13 @@ const RequireAuth = ({ children }) => {
 	const { user } = useAuth()
 	const location = useLocation()
 
-	return user.apiUser && user.firebaseUser ? (
+	return user?.apiUser && user?.firebaseUser ? (
 		<>
 			<Topbar />
 			<Outlet />
 		</>
 	) : (
-		children
+		<Unauthorized />
 		// <Navigate to='/unauthorized' state={{ from: location }} replace />
 	)
 }
