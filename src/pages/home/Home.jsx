@@ -30,7 +30,7 @@ function Home() {
 					</Col>
 					<Col lg={3}>
 						<Container>
-{/* 							<Button
+							{/*<Button
 								className='my-3 w-100'
 								variant='outline-light'
 								size='sm'
@@ -38,7 +38,9 @@ function Home() {
 								onClick={handleChat}>
 								Chat
 							</Button> */}
-							<Search className='my-3'/>
+							<div className='m-3 w-100'>
+								<Search />
+							</div>
 						</Container>
 					</Col>
 				</Row>

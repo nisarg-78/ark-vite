@@ -1,5 +1,6 @@
 import "./chat.css"
-
+import socketIOClient from "socket.io-client"
+const ENDPOINT = "http://127.0.0.1:8100"
 import {
 	Container,
 	Row,
@@ -12,15 +13,36 @@ import Form from "react-bootstrap/Form"
 import ListGroup from "react-bootstrap/ListGroup"
 import Spinner from "react-bootstrap/Spinner"
 import useAxiosPrivate from "../../hooks/useAxiosPrivate"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Plus } from "react-feather"
 
 export default function Chat() {
 	const axios = useAxiosPrivate()
+
 	const [message, setMessage] = useState()
-	// const [maxTokens, setMaxtokens] = useState()
 	const [reply, setReply] = useState("Send a message to GPT")
 	const [waiting, setWaiting] = useState(false)
+
+	useEffect(() => {
+		const socket = socketIOClient(ENDPOINT)
+		socket.on("connect", () => {
+			console.log("connect")
+		})
+
+		socket.on("disconnect", () => {
+			console.log("disconnect")
+		})
+
+		socket.on("pong", () => {
+			setLastPong(new Date().toISOString())
+		})
+
+		return () => {
+			socket.off("connect")
+			socket.off("disconnect")
+			socket.off("pong")
+		}
+	}, [])
 
 	const handleSendMessage = async (e) => {
 		setWaiting(true)
@@ -39,7 +61,7 @@ export default function Chat() {
 	return (
 		<main className='chat-container'>
 			<Container className='p-5 overflow-hidden vh-100 text-white'>
-				<Row className="h-100">
+				<Row className='h-100'>
 					<Col>
 						<Button variant='dark' className='my-2 w-100'>
 							Add Conversation <Plus />
@@ -62,7 +84,9 @@ export default function Chat() {
 							</ListGroup.Item>
 						</ListGroup>
 					</Col>
-					<Col md={8} className='d-flex justify-content-between flex-column chat-box'>
+					<Col
+						md={8}
+						className='d-flex justify-content-between flex-column chat-box'>
 						<Row className='my-2'>
 							{/* <span>max: {maxTokens}</span> */}
 							{/* <hr /> */}

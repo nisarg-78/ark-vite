@@ -10,7 +10,6 @@ function Error() {
         <p>
           Error Occured 😞
           <br />
-          (What a dissapointemt this guy is)
         </p>
         
             <Link to={`/`}>
