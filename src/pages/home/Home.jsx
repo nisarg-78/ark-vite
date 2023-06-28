@@ -38,7 +38,7 @@ function Home() {
 								onClick={handleChat}>
 								Chat
 							</Button> */}
-							<Search />
+							<Search className='my-3'/>
 						</Container>
 					</Col>
 				</Row>
