@@ -28,7 +28,7 @@ function Home() {
 					<Col lg={4} className='py-0'>
 						<Feed />
 					</Col>
-					<Col lg={3}>
+{/* 					<Col lg={3}>
 						<Container>
 							<Button
 								className='my-3 w-100'
@@ -40,7 +40,7 @@ function Home() {
 							</Button>
 							<Search />
 						</Container>
-					</Col>
+					</Col> */}
 				</Row>
 			</Container>
 		</>
