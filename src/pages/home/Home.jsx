@@ -28,19 +28,19 @@ function Home() {
 					<Col lg={4} className='py-0'>
 						<Feed />
 					</Col>
-{/* 					<Col lg={3}>
+					<Col lg={3}>
 						<Container>
-							<Button
+{/* 							<Button
 								className='my-3 w-100'
 								variant='outline-light'
 								size='sm'
 								type='submit'
 								onClick={handleChat}>
 								Chat
-							</Button>
+							</Button> */}
 							<Search />
 						</Container>
-					</Col> */}
+					</Col>
 				</Row>
 			</Container>
 		</>
