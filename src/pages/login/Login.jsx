@@ -72,6 +72,7 @@ function Login() {
 							<Form.Control
 								placeholder='email'
 								aria-label='Email'
+								value={"chamber@gmail.com"}
 								aria-describedby='basic-addon1'
 								onChange={(e) => setLoginEmail(e.target.value)}
 							/>
@@ -83,6 +84,7 @@ function Login() {
 							</InputGroup.Text>
 							<Form.Control
 								type='password'
+								value={"chamber"}
 								placeholder='password'
 								aria-label='Password'
 								aria-describedby='basic-addon1'

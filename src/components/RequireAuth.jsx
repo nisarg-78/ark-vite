@@ -2,6 +2,7 @@ import { useLocation, Navigate, Outlet } from "react-router-dom"
 import useAuth from "../hooks/useAuth"
 import Topbar from "./Navbar/Topbar"
 import Unauthorized from "../pages/Unauthorized/Unauthorized"
+import Login from "../pages/login/Login"
 
 const RequireAuth = ({ children }) => {
 	const { user } = useAuth()
@@ -13,7 +14,8 @@ const RequireAuth = ({ children }) => {
 			<Outlet />
 		</>
 	) : (
-		<Unauthorized />
+		<Login/>
+		// <Unauthorized />
 		// <Navigate to='/unauthorized' state={{ from: location }} replace />
 	)
 }
