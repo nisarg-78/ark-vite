@@ -22,8 +22,8 @@ function Login() {
 	const { setAlert } = useAlert()
 	const { user, setUser } = useAuth()
 
-	const [loginEmail, setLoginEmail] = useState("")
-	const [loginPassword, setLoginPassword] = useState("")
+	const [loginEmail, setLoginEmail] = useState("chamber@gmail.com")
+	const [loginPassword, setLoginPassword] = useState("chamber")
 	const [isLogging, setIsLogging] = useState(false)
 
 	const handleLogin = async (e) => {
